@@ -1,0 +1,55 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp"
+    tools:context="group2.roommates.CalendarActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#FFFFFF"
+        android:weightSum="1"
+        android:layout_alignParentBottom="true">
+
+        <CalendarView
+            android:layout_width="match_parent"
+            android:layout_height="225dp"
+            android:id="@+id/calendarView"
+            android:showWeekNumber="false"
+            android:selectedWeekBackgroundColor="#FFFFFF"
+            android:shownWeekCount="5"
+            android:background="#FFFFFF" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:text="Events for X"
+            android:id="@+id/header"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:textSize="14dp"
+            android:textColor="#ff000000"
+            android:textStyle="bold"
+            android:paddingTop="5dp" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="175dp"
+            android:id="@+id/calendarList"
+            android:layout_weight="1"
+            android:divider="#FFBBBBBB"
+            android:dividerHeight="1dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Event"
+            android:id="@+id/addEventButton"
+            android:onClick="addEventClick"
+            android:layout_gravity="center_horizontal" />
+
+    </LinearLayout>
+</RelativeLayout>

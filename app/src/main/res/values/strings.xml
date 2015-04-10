@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Roommates</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_calendar">CalendarActivity</string>
+    <string name="title_activity_home">HomeActivity</string>
+
+    <string name="action_example">Example action</string>
+    <string name="title_activity_to_do">ToDoActivity</string>
+
+    <string name="drawer_open">Drawer Opened</string>
+    <string name="drawer_close">Drawer Closed</string>
+
+    <string-array name="drawer_list">
+    <item>My Profile</item>
+    <item>Calendar</item>
+    <item>To-Do List</item>
+    <item>Expenses</item>
+</string-array>
+    <string name="title_activity_profile">ProfileActivity</string>
+
+</resources>
