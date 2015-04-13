@@ -156,7 +156,7 @@ public class ExpenseActivity extends ActionBarActivity {
     }
 
     private void updateLabel() {
-        String dateFormat = "mm/dd/yy";
+        String dateFormat = "MM/dd/yy";
         SimpleDateFormat df = new SimpleDateFormat(dateFormat, Locale.US);
 
         DATE_INPUT.setText(df.format(MY_CALENDAR.getTime()));
