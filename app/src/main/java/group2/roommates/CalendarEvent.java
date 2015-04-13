@@ -3,14 +3,17 @@ package group2.roommates;
 
 public class CalendarEvent {
 
-    private int id;
+    private int _id;
     private int date;
     private String title;
     private String description;
     private String author;
 
-    public CalendarEvent(int id, int date, String title, String description, String author){
-        this.id = id;
+    public CalendarEvent(){
+
+    }
+
+    public CalendarEvent(int date, String title, String description, String author){
         this.date = date;
         this.title = title;
         this.description = description;
@@ -18,7 +21,7 @@ public class CalendarEvent {
     }
 
     public int getId(){
-        return id;
+        return _id;
     }
 
     public int getDate(){
@@ -37,11 +40,23 @@ public class CalendarEvent {
         return author;
     }
 
-    @Override
-    public String toString(){
-        return id + "," + date + "," + title + "," + description + "," + author;
+    public void set_id(int _id) {
+        this._id = _id;
     }
 
+    public void setDate(int date) {
+        this.date = date;
+    }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 }
