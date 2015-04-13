@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <string-array name="description_array">
+            <item>Rent</item>
+            <item>Utilities</item>
+            <item>Groceries</item>
+            <item>Repairs</item>
+            <item>Other</item>
+        </string-array>
+</resources>
