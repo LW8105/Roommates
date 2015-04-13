@@ -2,7 +2,6 @@ package group2.roommates;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.provider.ContactsContract;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 
 public class HomeActivity extends ActionBarActivity {
@@ -35,7 +33,7 @@ public class HomeActivity extends ActionBarActivity {
         mDrawerList = (ListView) findViewById(R.id.drawerList);
         mDrawerItems = getResources().getStringArray(R.array.drawer_list);
 
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mDrawerItems));
+        mDrawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mDrawerItems));
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
@@ -54,7 +52,9 @@ public class HomeActivity extends ActionBarActivity {
                     startActivity(i);
                 }
                 if(position == 3){
-                    Toast.makeText(HomeActivity.this, "Not yet implemented", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(HomeActivity.this, ExpenseActivity.class);
+                    startActivity(i);
+//                    Toast.makeText(HomeActivity.this, "Not yet implemented", Toast.LENGTH_SHORT).show();
                 }
 
                 mDrawerLayout.closeDrawer(mDrawerList);

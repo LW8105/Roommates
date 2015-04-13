@@ -5,6 +5,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_calendar">CalendarActivity</string>
     <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_expenses">Expenses</string>
 
     <string name="action_example">Example action</string>
     <string name="title_activity_to_do">ToDoActivity</string>
@@ -13,11 +14,29 @@
     <string name="drawer_close">Drawer Closed</string>
 
     <string-array name="drawer_list">
-    <item>My Profile</item>
-    <item>Calendar</item>
-    <item>To-Do List</item>
-    <item>Expenses</item>
-</string-array>
+        <item>My Profile</item>
+        <item>Calendar</item>
+        <item>To-Do List</item>
+        <item>Expenses</item>
+    </string-array>
+
     <string name="title_activity_profile">ProfileActivity</string>
+
+
+    <string name="action_settings_text">Settings</string>
+    <string name="expense_name_text">Expense Name</string>
+    <string name="add_expense_button_text">Add Expense</string>
+    <string name="due_date_text">Due Date</string>
+    <string name="expense_amount_text">Expense Amount</string>
+    <string name="author_text">Author</string>
+    <string name="paid_status_text">Expense Status</string>
+    <string name="expense_description_text">Description</string>
+
+
+    <string name="expense_description_edit_text">Description</string>
+    <string name="expense_due_date_edit_text">Due Date</string>
+    <string name="expense_amount_edit_text">Amount</string>
+    <string name="expense_notes_edit_text">Notes</string>
+    <string name="amount_hint_text">00.00</string>
 
 </resources>
