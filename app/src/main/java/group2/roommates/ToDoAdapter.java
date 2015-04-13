@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
 import java.util.List;
 
 public class ToDoAdapter extends ArrayAdapter<ToDoItem> {
@@ -27,7 +28,6 @@ public class ToDoAdapter extends ArrayAdapter<ToDoItem> {
         String author = thelist.get(position).getAuthor();
         String description = thelist.get(position).getDescription();
         boolean checked = thelist.get(position).isChecked();
-
 
 
         TextView authorText = (TextView) customView.findViewById(R.id.authorText);

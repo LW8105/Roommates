@@ -26,13 +26,14 @@ public class LoginActivity extends ActionBarActivity {
         getMenuInflater().inflate(R.menu.menu_login, menu);
         return true;
     }
-    public static String getUserName () {
+
+    public static String getUserName() {
         return userName;
     }
 
-    public void logInClick(View view){
+    public void logInClick(View view) {
         Intent i = new Intent(this, HomeActivity.class);
-        EditText nameField = (EditText)findViewById(R.id.nameField);
+        EditText nameField = (EditText) findViewById(R.id.nameField);
         userName = nameField.getText().toString();
 
         //String userMessage = inputText.getText().toString();
@@ -40,6 +41,7 @@ public class LoginActivity extends ActionBarActivity {
 
         startActivity(i);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

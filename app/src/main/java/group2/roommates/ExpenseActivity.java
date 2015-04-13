@@ -6,8 +6,10 @@ import android.content.DialogInterface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -88,46 +90,29 @@ public class ExpenseActivity extends ActionBarActivity {
         final EditText DESCRIPTION_INPUT = (EditText) ADD_EXPENSE_VIEW.findViewById(R.id.editNotes);
 
 
-
         NAME_INPUT.setText("", TextView.BufferType.EDITABLE);
         AMOUNT_INPUT.setText("", TextView.BufferType.EDITABLE);
         DESCRIPTION_INPUT.setText("", TextView.BufferType.EDITABLE);
         DATE_INPUT.setText("", TextView.BufferType.EDITABLE);
 
 
-
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setTitle("Add New Expense");
         dialogBuilder.setView(ADD_EXPENSE_VIEW);
         dialogBuilder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ExpenseObject newExpense = new ExpenseObject(0, "$" + AMOUNT_INPUT.getText().toString() + " ", dueDate,
-                                NAME_INPUT.getText().toString(), LoginActivity.getUserName(), DESCRIPTION_INPUT.getText().toString(), false);
-                        expenseArray.add(newExpense);
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ExpenseObject newExpense = new ExpenseObject(0, "$" + AMOUNT_INPUT.getText().toString() + " ", dueDate,
+                        NAME_INPUT.getText().toString(), LoginActivity.getUserName(), DESCRIPTION_INPUT.getText().toString(), false);
+                expenseArray.add(newExpense);
 
-                        ListAdapter adapter = new ExpenseAdapter(ExpenseActivity.this, R.layout.expense_row, expenseArray);
-                        ListView expenseListView = (ListView) findViewById(R.id.expenseListView);
-                        expenseListView.setAdapter(adapter);
+                ListAdapter adapter = new ExpenseAdapter(ExpenseActivity.this, R.layout.expense_row, expenseArray);
+                ListView expenseListView = (ListView) findViewById(R.id.expenseListView);
+                expenseListView.setAdapter(adapter);
+                registerForContextMenu(expenseListView);
 
-                        expenseListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                            @Override
-                            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                                Log.v("Long Click", "position: " + position);
-
-
-
-
-                                return true;
-                            }
-                        });
-
-                    }
-
-                }
-
-        );
+            }
+        });
 
         dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
@@ -165,4 +150,33 @@ public class ExpenseActivity extends ActionBarActivity {
             dueDate = df.format(MY_CALENDAR.getTime());
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId() == R.id.expenseListView) {
+            ListView expenseListView = (ListView) v;
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            ExpenseObject object = (ExpenseObject) expenseListView.getItemAtPosition(info.position);
+
+            menu.setHeaderTitle(object.getExpenseName());
+
+            String[] menuOptions = getResources().getStringArray(R.array.menu_options_array);
+            for (int i = 0; i < menuOptions.length; i++)
+                menu.add(Menu.NONE, i, i, menuOptions[i]);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int menuItemIndex = item.getItemId();
+        String[] menuItems = getResources().getStringArray(R.array.menu_options_array);
+        String menuItemName = menuItems[menuItemIndex];
+        String listItemName = expenseArray.get(info.position).toString();
+
+        Log.v("Menu option selected", "edit");
+
+//        TextView text = (TextView) findViewById(R.id.footer);
+//        text.setText(String.format("Selected %s for item %s", menuItemName, listItemName));
+        return true;
+    }
 }

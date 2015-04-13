@@ -8,31 +8,31 @@ public class ToDoItem {
     private String author;
     private boolean checked;
 
-    public ToDoItem(int id, String description, String author, boolean checked){
+    public ToDoItem(int id, String description, String author, boolean checked) {
         this.id = id;
         this.description = description;
         this.author = author;
         this.checked = checked;
     }
 
-    public boolean isChecked(){
+    public boolean isChecked() {
         return checked;
     }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
 
-    public String getDescription(){
+    public String getDescription() {
         return description;
     }
 
-    public String getAuthor(){
+    public String getAuthor() {
         return author;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return id + "," + description + "," + author;
     }
 }

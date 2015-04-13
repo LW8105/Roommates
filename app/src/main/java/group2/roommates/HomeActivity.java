@@ -35,23 +35,23 @@ public class HomeActivity extends ActionBarActivity {
 
         mDrawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mDrawerItems));
 
-        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if(position == 0) {
+                if (position == 0) {
                     Intent i = new Intent(HomeActivity.this, ProfileActivity.class);
                     startActivity(i);
                 }
-                if(position == 1){
+                if (position == 1) {
                     Intent i = new Intent(HomeActivity.this, CalendarActivity.class);
                     startActivity(i);
                 }
-                if(position == 2){
+                if (position == 2) {
                     Intent i = new Intent(HomeActivity.this, ToDoActivity.class);
                     startActivity(i);
                 }
-                if(position == 3){
+                if (position == 3) {
                     Intent i = new Intent(HomeActivity.this, ExpenseActivity.class);
                     startActivity(i);
 //                    Toast.makeText(HomeActivity.this, "Not yet implemented", Toast.LENGTH_SHORT).show();
@@ -61,14 +61,14 @@ public class HomeActivity extends ActionBarActivity {
             }//end of onItemClick function
         });//end of listener declaration
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close){
-            public void onDrawerClosed(View v){
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
+            public void onDrawerClosed(View v) {
                 super.onDrawerClosed(v);
                 invalidateOptionsMenu();
                 syncState();
             }
 
-            public void onDrawerOpened(View v){
+            public void onDrawerOpened(View v) {
                 super.onDrawerOpened(v);
                 invalidateOptionsMenu();
                 syncState();
@@ -83,29 +83,30 @@ public class HomeActivity extends ActionBarActivity {
     }//end of onCreate
 
     @Override
-    public void onPostCreate(Bundle savedInstanceState){
+    public void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mDrawerToggle.syncState();
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig){
+    public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch(item.getItemId()){
-            case android.R.id.home:{
-                if(mDrawerLayout.isDrawerOpen(mDrawerList)){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
                     mDrawerLayout.closeDrawer(mDrawerList);
                 } else {
                     mDrawerLayout.openDrawer(mDrawerList);
                 }
                 return true;
             }
-            default: return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

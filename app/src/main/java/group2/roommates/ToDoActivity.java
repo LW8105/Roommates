@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class ToDoActivity extends ActionBarActivity {
 
-    public ArrayList<ToDoItem> toDoArray = new ArrayList<ToDoItem>();
+    public ArrayList<ToDoItem> toDoArray = new ArrayList<>();
     private AlertDialog.Builder dialogBuilder;
 
     @Override
@@ -27,7 +27,7 @@ public class ToDoActivity extends ActionBarActivity {
         setContentView(R.layout.activity_to_do);
         setTitle("To-Do List");
         ListAdapter adapter = new ToDoAdapter(this, R.layout.todo_row, toDoArray);
-        ListView toDoListView = (ListView)findViewById(R.id.toDoListView);
+        ListView toDoListView = (ListView) findViewById(R.id.toDoListView);
         toDoListView.setAdapter(adapter);
     }
 
@@ -50,7 +50,7 @@ public class ToDoActivity extends ActionBarActivity {
 
 
                 ListAdapter adapter = new ToDoAdapter(ToDoActivity.this, R.layout.todo_row, toDoArray);
-                ListView toDoListView = (ListView)findViewById(R.id.toDoListView);
+                ListView toDoListView = (ListView) findViewById(R.id.toDoListView);
                 toDoListView.setAdapter(adapter);
             }
         });

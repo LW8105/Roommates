@@ -28,12 +28,12 @@ import android.widget.TextView;
 
 public class CalendarActivity extends ActionBarActivity {
 
-    public ArrayList<CalendarEvent> dummyEventList = new ArrayList<CalendarEvent>();
+    public ArrayList<CalendarEvent> dummyEventList = new ArrayList<>();
     //private Button addEventButton;
     private AlertDialog.Builder dialogBuilder;
-    SimpleDateFormat sdfConverter = new SimpleDateFormat("yyyyMMdd",Locale.US);
+    SimpleDateFormat sdfConverter = new SimpleDateFormat("yyyyMMdd", Locale.US);
     GregorianCalendar gCalendar = new GregorianCalendar(TimeZone.getTimeZone("PST"));
-    public ArrayList<CalendarEvent> dailyEventList = new ArrayList<CalendarEvent>();
+    public ArrayList<CalendarEvent> dailyEventList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,51 +43,50 @@ public class CalendarActivity extends ActionBarActivity {
         //addEventButton = (Button) findViewById(R.id.addEventButton);
 
 
-
         final CalendarView calendar = (CalendarView) findViewById(R.id.calendarView);
         gCalendar.setTimeInMillis(calendar.getDate());
 
-        String dateString = ("Events for " + gCalendar.get(Calendar.MONTH) + "-" + gCalendar.get(Calendar.DAY_OF_MONTH) + "-" + gCalendar.get(Calendar.YEAR));
+        String dateString = ("Events for " + (gCalendar.get(Calendar.MONTH) + 1)  + "-" + gCalendar.get(Calendar.DAY_OF_MONTH) + "-" + gCalendar.get(Calendar.YEAR));
         TextView header = (TextView) findViewById(R.id.header);
         header.setText(dateString);
 
         int thisDay = Integer.parseInt(sdfConverter.format(gCalendar.getTime())); //convert selected date to "yyyymmdd" format
 
-        for(int i=0; i < dummyEventList.size(); i++){//fill the daily event array from the global event array
+        for (int i = 0; i < dummyEventList.size(); i++) {//fill the daily event array from the global event array
 
-            if(dummyEventList.get(i).getDate() == thisDay){
+            if (dummyEventList.get(i).getDate() == thisDay) {
                 dailyEventList.add(dummyEventList.get(i));
             }
 
         }
 
         ListAdapter adapter = new EventAdapter(this, R.layout.custom_row, dailyEventList);
-        ListView calendarList = (ListView)findViewById(R.id.calendarList);
+        ListView calendarList = (ListView) findViewById(R.id.calendarList);
         calendarList.setAdapter(adapter);
 
         calendar.setOnDateChangeListener(new OnDateChangeListener() {
 
             @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month,int dayOfMonth) {//Runs whenever a new day is selected from the calendar
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {//Runs whenever a new day is selected from the calendar
                 gCalendar.setTimeInMillis(calendar.getDate());
 
-                String dateString = ("Events for " + gCalendar.get(Calendar.MONTH) + "-" + gCalendar.get(Calendar.DAY_OF_MONTH) + "-" + gCalendar.get(Calendar.YEAR));
+                String dateString = ("Events for " + (gCalendar.get(Calendar.MONTH) + 1) + "-" + gCalendar.get(Calendar.DAY_OF_MONTH) + "-" + gCalendar.get(Calendar.YEAR));
                 TextView header = (TextView) findViewById(R.id.header);
                 header.setText(dateString);
 
                 int thisDay = Integer.parseInt(sdfConverter.format(gCalendar.getTime())); //convert selected date to "yyyymmdd" format
                 dailyEventList.clear();
 
-                for(int i=0; i < dummyEventList.size(); i++){//fill the daily event array from the global event array
+                for (int i = 0; i < dummyEventList.size(); i++) {//fill the daily event array from the global event array
 
-                    if(dummyEventList.get(i).getDate() == thisDay){
+                    if (dummyEventList.get(i).getDate() == thisDay) {
                         dailyEventList.add(dummyEventList.get(i));
                     }
 
                 }
 
                 ListAdapter adapter = new EventAdapter(CalendarActivity.this, R.layout.custom_row, dailyEventList);
-                ListView calendarList = (ListView)findViewById(R.id.calendarList);
+                ListView calendarList = (ListView) findViewById(R.id.calendarList);
                 calendarList.setAdapter(adapter);
 
             }
@@ -96,39 +95,39 @@ public class CalendarActivity extends ActionBarActivity {
 
     }
 
-public void addEventClick (View view) {
-    LayoutInflater inflater = LayoutInflater.from(this);
-    final View addEventView = inflater.inflate(R.layout.event_dialog, null);
-    final EditText titleInput = (EditText) addEventView.findViewById(R.id.editTitle);
-    final EditText descriptionInput = (EditText) addEventView.findViewById(R.id.editDescription);
+    public void addEventClick(View view) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        final View addEventView = inflater.inflate(R.layout.event_dialog, null);
+        final EditText titleInput = (EditText) addEventView.findViewById(R.id.editTitle);
+        final EditText descriptionInput = (EditText) addEventView.findViewById(R.id.editDescription);
 
-    titleInput.setText("", TextView.BufferType.EDITABLE);
-    descriptionInput.setText("", TextView.BufferType.EDITABLE);
+        titleInput.setText("", TextView.BufferType.EDITABLE);
+        descriptionInput.setText("", TextView.BufferType.EDITABLE);
 
-    dialogBuilder = new AlertDialog.Builder(this);
-    dialogBuilder.setTitle("Add an Event");
-    dialogBuilder.setView(addEventView);
-    dialogBuilder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            int currentDay = Integer.parseInt(sdfConverter.format(gCalendar.getTime())); //convert selected date to "yyyymmdd" format
-            CalendarEvent newEvent = new CalendarEvent(0, currentDay, titleInput.getText().toString(), descriptionInput.getText().toString(), LoginActivity.getUserName());
-            dummyEventList.add(newEvent);
-            dailyEventList.add(newEvent);
+        dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle("Add an Event");
+        dialogBuilder.setView(addEventView);
+        dialogBuilder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int currentDay = Integer.parseInt(sdfConverter.format(gCalendar.getTime())); //convert selected date to "yyyymmdd" format
+                CalendarEvent newEvent = new CalendarEvent(0, currentDay, titleInput.getText().toString(), descriptionInput.getText().toString(), LoginActivity.getUserName());
+                dummyEventList.add(newEvent);
+                dailyEventList.add(newEvent);
 
-            ListAdapter adapter = new EventAdapter(CalendarActivity.this, R.layout.custom_row, dailyEventList);
-            ListView calendarList = (ListView)findViewById(R.id.calendarList);
-            calendarList.setAdapter(adapter);
-        }
-    });
-    dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
+                ListAdapter adapter = new EventAdapter(CalendarActivity.this, R.layout.custom_row, dailyEventList);
+                ListView calendarList = (ListView) findViewById(R.id.calendarList);
+                calendarList.setAdapter(adapter);
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
-        }
-    });
-    dialogBuilder.show();
-}
+            }
+        });
+        dialogBuilder.show();
+    }
 
 
     @Override

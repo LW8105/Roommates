@@ -5,10 +5,11 @@ import android.view.View;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventAdapter extends ArrayAdapter<CalendarEvent>{
+public class EventAdapter extends ArrayAdapter<CalendarEvent> {
 
     private List<CalendarEvent> thelist = null;
 
@@ -25,7 +26,7 @@ public class EventAdapter extends ArrayAdapter<CalendarEvent>{
 
 
         //String title = getItem(position).getTitle();
-       // String author = getItem(position).getAuthor();
+        // String author = getItem(position).getAuthor();
         //String description = getItem(position).getDescription();
 
         String title = thelist.get(position).getTitle();

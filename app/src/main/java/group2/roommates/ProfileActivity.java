@@ -34,10 +34,11 @@ public class ProfileActivity extends ActionBarActivity {
         nameTextView.setText(LoginActivity.getUserName());
     }
 
-    public void avatarClick (View view) {
-        Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+    public void avatarClick(View view) {
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, 1);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -63,8 +64,7 @@ public class ProfileActivity extends ActionBarActivity {
                 //Bitmap resizedAvatar = Bitmap.createScaledBitmap(rotatedBitmap, 150, 150, false);
                 //Log.w("path of image", picturePath + "");
                 avatarImageView.setImageBitmap(resizedAvatar);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.toString();
             }
 
@@ -94,29 +94,29 @@ public class ProfileActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public int correctOrientation(int orientation){//returns the number of degrees to rotate (clockwise) based on the dimension tag
-        if (orientation == 6){
+    public int correctOrientation(int orientation) {//returns the number of degrees to rotate (clockwise) based on the dimension tag
+        if (orientation == 6) {
             return 90;
         }
-        if (orientation == 3){
+        if (orientation == 3) {
             return 180;
         }
-        if (orientation == 8){
+        if (orientation == 8) {
             return 270;
         }
         return 0;
     }
 
-    public Bitmap scaleBitmap(Bitmap originalBitmap, int width, int height){// width and height parameters are the desired dimensions of the returned bitmap
-        Bitmap newBitmap = Bitmap.createBitmap((int)width, (int)height, Bitmap.Config.ARGB_8888);
+    public Bitmap scaleBitmap(Bitmap originalBitmap, int width, int height) {// width and height parameters are the desired dimensions of the returned bitmap
+        Bitmap newBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
-        float originalWidth = originalBitmap.getWidth() ;
+        float originalWidth = originalBitmap.getWidth();
         float originalHeight = originalBitmap.getHeight();
 
         Canvas canvas = new Canvas(newBitmap);
 
-        float scale = width/originalWidth;
-        float xTranslation = 0.0f, yTranslation = (height - originalHeight * scale)/2.0f;
+        float scale = width / originalWidth;
+        float xTranslation = 0.0f, yTranslation = (height - originalHeight * scale) / 2.0f;
         Matrix transformation = new Matrix();
         transformation.postTranslate(xTranslation, yTranslation);
         transformation.preScale(scale, scale);
