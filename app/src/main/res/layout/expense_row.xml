@@ -12,8 +12,8 @@
         android:layout_height="40dp"
         android:text="@string/expense_name_text"
         android:id="@+id/expenseNameText"
-        android:textColor="#ff000000"
-        android:textSize="25sp"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
         android:textStyle="bold"
         android:paddingLeft="30dp"
         android:paddingTop="5dp"
@@ -31,22 +31,23 @@
         android:paddingRight="15dp"
         android:paddingBottom="5dp"
         android:singleLine="false"
-        android:textStyle="bold|italic"
+        android:textStyle="bold"
         android:layout_alignTop="@+id/expenseAmountText"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_marginStart="29dp"
         android:layout_marginLeft="29dp"
-        android:textSize="15sp"
-        android:layout_marginTop="5dp" />
+        android:textSize="16dp"
+        android:layout_marginTop="5dp"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/expense_amount_text"
         android:id="@+id/expenseAmountText"
-        android:textSize="15sp"
-        android:textStyle="bold|italic"
+        android:textSize="16dp"
+        android:textStyle="bold"
         android:layout_gravity="right"
         android:textColor="@android:color/holo_green_dark"
         android:layout_marginLeft="5dp"
@@ -66,13 +67,14 @@
         android:id="@+id/authorText"
         android:layout_gravity="right"
         android:paddingRight="15dp"
-        android:textSize="15sp"
+        android:textSize="14dp"
         android:layout_below="@+id/dueDateText"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:paddingTop="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginLeft="5dp" />
+        android:layout_marginLeft="5dp"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -88,8 +90,9 @@
         android:paddingBottom="5dp"
         android:layout_alignEnd="@+id/expenseAmountText"
         android:layout_alignRight="@+id/expenseAmountText"
-        android:textSize="15sp"
-        android:layout_marginTop="5dp" />
+        android:textSize="16dp"
+        android:layout_marginTop="5dp"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -99,10 +102,11 @@
         android:id="@+id/expenseStatusText"
         android:layout_gravity="right"
         android:paddingRight="15dp"
-        android:textSize="15sp"
+        android:textSize="16dp"
         android:paddingTop="10dp"
         android:layout_below="@+id/dueDateText"
         android:layout_alignStart="@+id/dueDateText"
-        android:layout_alignLeft="@+id/dueDateText" />
+        android:layout_alignLeft="@+id/dueDateText"
+        android:textColor="#FFFFFF" />
 
 </RelativeLayout>
