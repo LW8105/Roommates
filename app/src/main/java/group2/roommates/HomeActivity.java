@@ -62,7 +62,10 @@ public class HomeActivity extends ActionBarActivity {
                 if (position == 3) {
                     Intent i = new Intent(HomeActivity.this, ExpenseActivity.class);
                     startActivity(i);
-//                    Toast.makeText(HomeActivity.this, "Not yet implemented", Toast.LENGTH_SHORT).show();
+                }
+                if (position == 4) {
+                    Intent i = new Intent(HomeActivity.this, RoommatezActivity.class);
+                    startActivity(i);
                 }
 
                 mDrawerLayout.closeDrawer(mDrawerList);

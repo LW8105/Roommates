@@ -110,7 +110,6 @@ public class ExpenseActivity extends ActionBarActivity {
                 ListView expenseListView = (ListView) findViewById(R.id.expenseListView);
                 expenseListView.setAdapter(adapter);
                 registerForContextMenu(expenseListView);
-
             }
         });
 

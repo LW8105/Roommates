@@ -25,7 +25,7 @@
         android:layout_height="match_parent"
         android:id="@+id/expenseListView"
         android:layout_above="@+id/addExpenseButton"
-        android:divider="#FFFFFF"
+        android:divider="#FFBBBBBB"
         android:dividerHeight="1dp" />
 
 </RelativeLayout>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="group2.roommates">
+    package="group2.roommates" >
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -8,35 +8,36 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".LoginActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".CalendarActivity"
-            android:label="@string/title_activity_calendar"/>
+            android:label="@string/title_activity_calendar" />
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/homeTheme"/>
+            android:theme="@style/homeTheme" />
         <activity
             android:name=".ToDoActivity"
-            android:label="@string/title_activity_to_do"/>
+            android:label="@string/title_activity_to_do" />
         <activity
             android:name=".ProfileActivity"
-            android:label="@string/title_activity_profile"/>
-
+            android:label="@string/title_activity_profile" />
         <activity
             android:name=".ExpenseActivity"
-            android:label="@string/title_activity_expenses"/>
-
+            android:label="@string/title_activity_expenses" />
+        <activity
+            android:name=".RoommatezActivity"
+            android:label="@string/title_activity_roommatez" >
+        </activity>
     </application>
 
 </manifest>
