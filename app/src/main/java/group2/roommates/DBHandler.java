@@ -1,16 +1,16 @@
 package group2.roommates;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.Cursor;
+import android.content.Context;
+import android.content.ContentValues;
 
 import java.util.ArrayList;
 
 public class DBHandler extends SQLiteOpenHelper{
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "roommates_data.db";
 
     public static final String TABLE_EVENTS = "events"; //name of the table storing information for calendar events
@@ -20,13 +20,20 @@ public class DBHandler extends SQLiteOpenHelper{
     public static final String EVENT_DATE = "date";
     public static final String EVENT_AUTHOR = "author";
 
+    public static final String TABLE_FEED = "feed"; //table storing FeedObjects
+    public static final String FEED_ID = "_id";
+    public static final String FEED_TYPE = "type";
+    public static final String FEED_TITLE = "title";
+    public static final String FEED_AUTHOR = "author";
+    public static final String FEED_TIME = "time";
+
     public DBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query = "CREATE TABLE " + TABLE_EVENTS + "(" +
+        String query_events = "CREATE TABLE " + TABLE_EVENTS + "(" +
                 EVENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 EVENT_TITLE + " TEXT, " +
                 EVENT_DESCRIPTION + " TEXT, " +
@@ -34,13 +41,23 @@ public class DBHandler extends SQLiteOpenHelper{
                 EVENT_AUTHOR + " TEXT" +
                 ");";
 
-            db.execSQL(query);
+        String query_feed = "CREATE TABLE " + TABLE_FEED + "(" +
+                FEED_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                FEED_TYPE + " TEXT, " +
+                FEED_TITLE + " TEXT, " +
+                FEED_AUTHOR + " TEXT, " +
+                FEED_TIME + " TEXT" +
+                ");";
+
+        db.execSQL(query_events);
+        db.execSQL(query_feed);
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FEED);
         onCreate(db);
     }
 
@@ -57,12 +74,29 @@ public class DBHandler extends SQLiteOpenHelper{
         db.close();
     }
 
-    public void deleteEvent(String title){ //Delete an event row in the database
+    public void addFeedObject(FeedObject feedObject){ //Add a new feed object row to the database
+        ContentValues values = new ContentValues();
+        //fill the columns with their corresponding values
+        values.put(FEED_TYPE, feedObject.getType());
+        values.put(FEED_TITLE, feedObject.getTitle());
+        values.put(FEED_AUTHOR, feedObject.getAuthor());
+        values.put(FEED_TIME, feedObject.getTimeCreated());
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.insert(TABLE_FEED, null, values);
+        db.close();
+    }
+
+    public void deleteEvent(String title){ //Delete an event row in the database. (Need to update to use _id if possible)
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_EVENTS + " WHERE " + EVENT_TITLE + "=\"" + title + "\";");
     }
 
-    public String databaseToString(){ //not used
+    public void deleteFeedObject(){
+        //to be completed
+    }
+
+    public String databaseToString(){
         String dbString = "";
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_EVENTS + " WHERE 1";
@@ -112,8 +146,53 @@ public class DBHandler extends SQLiteOpenHelper{
         return allEventsArray;
     }// end of pullEvents method
 
+    public ArrayList<FeedObject> pullFeed (){
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_FEED + " WHERE 1";
+        //Cursor points to a location in the results
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst(); // move to the first row
+
+        ArrayList<FeedObject> feedArray = new ArrayList<FeedObject>();
+
+        while(!c.isAfterLast()){ //While there are still more entries (while the cursor is not after the last entry)
+            //Loops through all rows in the table
+
+            String pType = c.getString(c.getColumnIndex("type"));
+            String pTitle = c.getString(c.getColumnIndex("title"));
+            String pAuthor = c.getString(c.getColumnIndex("author"));
+            String pTime = c.getString(c.getColumnIndex("time"));
+            int pId = c.getInt(c.getColumnIndex("_id"));
+
+            FeedObject pulledFeedObject = new FeedObject(pType, pTitle, pAuthor, pTime);
+            pulledFeedObject.set_id(pId);
+            feedArray.add(pulledFeedObject);
+
+            c.moveToNext();
+        }//end while
+        db.close();
+
+        return feedArray;
+    }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

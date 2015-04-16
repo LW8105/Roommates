@@ -12,7 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+
+import java.util.ArrayList;
 
 
 public class HomeActivity extends ActionBarActivity {
@@ -21,12 +24,17 @@ public class HomeActivity extends ActionBarActivity {
     ListView mDrawerList;
     ActionBarDrawerToggle mDrawerToggle;
     String[] mDrawerItems;
+    public ArrayList<FeedObject> feedArray = new ArrayList<FeedObject>();
+    DBHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         setTitle("Home");
+
+        dbHandler = new DBHandler(this, null, null, 1); //SQLite DB handler
+        feedArray = dbHandler.pullFeed(); //fill allEventsArray with calendarEvent objects from the db
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
@@ -80,6 +88,12 @@ public class HomeActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         mDrawerToggle.syncState();
+
+        //Populate the ListView
+        ListAdapter adapter = new FeedAdapter(this, R.layout.feed_row, feedArray);
+        ListView feedListView = (ListView)findViewById(R.id.feedListView);
+        feedListView.setAdapter(adapter);
+
     }//end of onCreate
 
     @Override
@@ -115,6 +129,17 @@ public class HomeActivity extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dbHandler = new DBHandler(this, null, null, 1); //SQLite DB handler
+        feedArray = dbHandler.pullFeed(); //fill allEventsArray with calendarEvent objects from the db
+        //Populate the ListView
+        ListAdapter adapter = new FeedAdapter(this, R.layout.feed_row, feedArray);
+        ListView feedListView = (ListView)findViewById(R.id.feedListView);
+        feedListView.setAdapter(adapter);
     }
 
 }

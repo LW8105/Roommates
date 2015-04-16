@@ -45,7 +45,7 @@ public class CalendarActivity extends ActionBarActivity {
         final CalendarView calendar = (CalendarView) findViewById(R.id.calendarView);
         gCalendar.setTimeInMillis(calendar.getDate());
 
-        String dateString = ("Events for " + gCalendar.get(Calendar.MONTH) + "-" + gCalendar.get(Calendar.DAY_OF_MONTH) + "-" + gCalendar.get(Calendar.YEAR));
+        String dateString = ("Events for " + (gCalendar.get(Calendar.MONTH)+1) + "-" + gCalendar.get(Calendar.DAY_OF_MONTH) + "-" + gCalendar.get(Calendar.YEAR));
         TextView header = (TextView) findViewById(R.id.header);
         header.setText(dateString);
 
@@ -68,7 +68,7 @@ public class CalendarActivity extends ActionBarActivity {
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {//Runs whenever a new day is selected from the calendar
                 gCalendar.setTimeInMillis(calendar.getDate());
 
-                String dateString = ("Events for " + gCalendar.get(Calendar.MONTH) + "-" + gCalendar.get(Calendar.DAY_OF_MONTH) + "-" + gCalendar.get(Calendar.YEAR));
+                String dateString = ("Events for " + (gCalendar.get(Calendar.MONTH)+1) + "-" + gCalendar.get(Calendar.DAY_OF_MONTH) + "-" + gCalendar.get(Calendar.YEAR));
                 TextView header = (TextView) findViewById(R.id.header);
                 header.setText(dateString);
 
@@ -125,6 +125,13 @@ public class CalendarActivity extends ActionBarActivity {
                 ListAdapter adapter = new EventAdapter(CalendarActivity.this, R.layout.custom_row, dailyEventsArray);
                 ListView calendarList = (ListView)findViewById(R.id.calendarList);
                 calendarList.setAdapter(adapter);
+
+                //Create a corresponding feedObject and add it to the database
+                Long tsLong = System.currentTimeMillis(); //need to know what time the event was added by a user
+                java.util.Date time = new java.util.Date(tsLong);
+                String timeString = time.toString(); // dow mon dd hh:mm:ss zzz yyyy
+                FeedObject newFeedObject = new FeedObject("event", titleInput.getText().toString(), LoginActivity.getUserName(), timeString);
+                dbHandler.addFeedObject(newFeedObject);
             }
         });
         dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
