@@ -14,18 +14,25 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class ToDoActivity extends ActionBarActivity {
 
     public ArrayList<ToDoItem> toDoArray = new ArrayList<>();
     private AlertDialog.Builder dialogBuilder;
+    DBHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do);
         setTitle("To-Do List");
+
+        dbHandler = new DBHandler(this, null, null, 1); //SQLite DB handler
+        toDoArray = dbHandler.pullToDoList(); //fill toDoArray with items from the db
+        Collections.reverse(toDoArray);
+
         ListAdapter adapter = new ToDoAdapter(this, R.layout.todo_row, toDoArray);
         ListView toDoListView = (ListView) findViewById(R.id.toDoListView);
         toDoListView.setAdapter(adapter);
@@ -45,13 +52,21 @@ public class ToDoActivity extends ActionBarActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                ToDoItem newItem = new ToDoItem(0, descriptionInput.getText().toString(), LoginActivity.getUserName(), false);
-                toDoArray.add(newItem);
-
-
+                ToDoItem newItem = new ToDoItem(descriptionInput.getText().toString(), LoginActivity.getUserName(), 0);
+                dbHandler.addToDoItem(newItem); //add new item to the DB
+                toDoArray = dbHandler.pullToDoList(); //repopulate the array with the updated data
+                Collections.reverse(toDoArray);
+                
                 ListAdapter adapter = new ToDoAdapter(ToDoActivity.this, R.layout.todo_row, toDoArray);
                 ListView toDoListView = (ListView) findViewById(R.id.toDoListView);
                 toDoListView.setAdapter(adapter);
+
+                //Create a corresponding feedObject and add it to the database
+                Long tsLong = System.currentTimeMillis(); //need to know what time the event was added by a user
+                java.util.Date time = new java.util.Date(tsLong);
+                String timeString = time.toString(); // dow mon dd hh:mm:ss zzz yyyy
+                FeedObject newFeedObject = new FeedObject("item to the to-do list", newItem.getDescription(), LoginActivity.getUserName(), timeString);
+                dbHandler.addFeedObject(newFeedObject);
             }
         });
         dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -61,6 +76,10 @@ public class ToDoActivity extends ActionBarActivity {
             }
         });
         dialogBuilder.show();
+    }
+
+    public void checkBoxClick (View view) {
+
     }
 
     @Override
@@ -83,5 +102,17 @@ public class ToDoActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dbHandler = new DBHandler(this, null, null, 1); //SQLite DB handler
+        toDoArray = dbHandler.pullToDoList(); //fill toDoArray with items from the db
+        Collections.reverse(toDoArray);
+
+        ListAdapter adapter = new ToDoAdapter(this, R.layout.todo_row, toDoArray);
+        ListView toDoListView = (ListView) findViewById(R.id.toDoListView);
+        toDoListView.setAdapter(adapter);
     }
 }

@@ -27,7 +27,7 @@ public class ToDoAdapter extends ArrayAdapter<ToDoItem> {
 
         String author = thelist.get(position).getAuthor();
         String description = thelist.get(position).getDescription();
-        boolean checked = thelist.get(position).isChecked();
+        int checked = thelist.get(position).getChecked();
 
 
         TextView authorText = (TextView) customView.findViewById(R.id.authorText);
@@ -36,8 +36,11 @@ public class ToDoAdapter extends ArrayAdapter<ToDoItem> {
 
         authorText.setText("added by " + author);
         descriptionText.setText(description);
-        descriptionText.setChecked(checked);
-
+        if(checked == 1) {
+            descriptionText.setChecked(true);
+        }else{
+            descriptionText.setChecked(false);
+        }
         return customView;
 
     }
