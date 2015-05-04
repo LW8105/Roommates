@@ -3,5 +3,6 @@
     <string-array name="menu_options_array">
         <item>Edit</item>
         <item>Delete</item>
+        <item>Mark as Paid/Not Paid</item>
     </string-array>
 </resources>
