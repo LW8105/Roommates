@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class DBHandler extends SQLiteOpenHelper{
 
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
     private static final String DATABASE_NAME = "roommates_data.db";
 
     public static final String TABLE_EVENTS = "events"; //name of the table storing information for calendar events
@@ -20,12 +20,19 @@ public class DBHandler extends SQLiteOpenHelper{
     public static final String EVENT_DATE = "date";
     public static final String EVENT_AUTHOR = "author";
 
+    public static final String TABLE_TODO = "todo"; //table storing items in the to-do list
+    public static final String TODO_ID = "_id";
+    public static final String TODO_DESCRIPTION = "description";
+    public static final String TODO_AUTHOR = "author";
+    public static final String TODO_CHECKED = "checked";
+
     public static final String TABLE_FEED = "feed"; //table storing FeedObjects
     public static final String FEED_ID = "_id";
     public static final String FEED_TYPE = "type";
     public static final String FEED_TITLE = "title";
     public static final String FEED_AUTHOR = "author";
     public static final String FEED_TIME = "time";
+
 
     public DBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -41,6 +48,13 @@ public class DBHandler extends SQLiteOpenHelper{
                 EVENT_AUTHOR + " TEXT" +
                 ");";
 
+        String query_todo = "CREATE TABLE " + TABLE_TODO + "(" +
+                TODO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                TODO_DESCRIPTION + " TEXT, " +
+                TODO_AUTHOR + " TEXT, " +
+                TODO_CHECKED + " INTEGER" +
+                ");";
+
         String query_feed = "CREATE TABLE " + TABLE_FEED + "(" +
                 FEED_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 FEED_TYPE + " TEXT, " +
@@ -50,6 +64,7 @@ public class DBHandler extends SQLiteOpenHelper{
                 ");";
 
         db.execSQL(query_events);
+        db.execSQL(query_todo);
         db.execSQL(query_feed);
 
     }
@@ -57,6 +72,7 @@ public class DBHandler extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TODO);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_FEED);
         onCreate(db);
     }
@@ -84,6 +100,18 @@ public class DBHandler extends SQLiteOpenHelper{
 
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_FEED, null, values);
+        db.close();
+    }
+
+    public void addToDoItem(ToDoItem toDoItem){ //Add a new to-do row to the database
+        ContentValues values = new ContentValues();
+        //fill the columns with their corresponding values
+        values.put(TODO_DESCRIPTION, toDoItem.getDescription());
+        values.put(TODO_AUTHOR, toDoItem.getAuthor());
+        values.put(TODO_CHECKED, toDoItem.getChecked());
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.insert(TABLE_TODO, null, values);
         db.close();
     }
 
@@ -173,6 +201,34 @@ public class DBHandler extends SQLiteOpenHelper{
         db.close();
 
         return feedArray;
+    }
+
+    public ArrayList<ToDoItem> pullToDoList (){
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_TODO + " WHERE 1";
+        //Cursor points to a location in the results
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst(); // move to the first row
+
+        ArrayList<ToDoItem> toDoArray = new ArrayList<ToDoItem>();
+
+        while(!c.isAfterLast()){ //While there are still more entries (while the cursor is not after the last entry)
+            //Loops through all rows in the table
+
+            String pDescription = c.getString(c.getColumnIndex("description"));
+            String pAuthor = c.getString(c.getColumnIndex("author"));
+            int pChecked = c.getInt(c.getColumnIndex("checked"));
+            int pId = c.getInt(c.getColumnIndex("_id"));
+
+            ToDoItem pulledItem = new ToDoItem(pDescription, pAuthor, pChecked);
+            pulledItem.set_id(pId);
+            toDoArray.add(pulledItem);
+
+            c.moveToNext();
+        }//end while
+        db.close();
+
+        return toDoArray;
     }
 
 }

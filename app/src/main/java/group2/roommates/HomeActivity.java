@@ -16,6 +16,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class HomeActivity extends ActionBarActivity {
@@ -34,7 +35,8 @@ public class HomeActivity extends ActionBarActivity {
         setTitle("Home");
 
         dbHandler = new DBHandler(this, null, null, 1); //SQLite DB handler
-        feedArray = dbHandler.pullFeed(); //fill allEventsArray with calendarEvent objects from the db
+        feedArray = dbHandler.pullFeed();
+        Collections.reverse(feedArray);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
@@ -140,6 +142,7 @@ public class HomeActivity extends ActionBarActivity {
         super.onResume();
         dbHandler = new DBHandler(this, null, null, 1); //SQLite DB handler
         feedArray = dbHandler.pullFeed(); //fill allEventsArray with calendarEvent objects from the db
+        Collections.reverse(feedArray);
         //Populate the ListView
         ListAdapter adapter = new FeedAdapter(this, R.layout.feed_row, feedArray);
         ListView feedListView = (ListView)findViewById(R.id.feedListView);
