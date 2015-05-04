@@ -4,16 +4,18 @@ public class ExpenseObject {
 
     private int id;
     private String expenseAmount;
+    private double dividedAmount;
     private String dueDate;
     private String expenseName;
     private String author;
     private String notes;
     private boolean paid;
 
-    public ExpenseObject(int id, String expenseAmount, String dueDate, String expenseName,
+    public ExpenseObject(int id, String expenseAmount, double dividedAmount, String dueDate, String expenseName,
                          String author, String description, boolean paid) {
         this.id = id;
         this.expenseAmount = expenseAmount;
+        this.dividedAmount = dividedAmount;
         this.dueDate = dueDate;
         this.author = author;
         this.expenseName = expenseName;
@@ -27,6 +29,10 @@ public class ExpenseObject {
 
     public String getExpenseAmount() {
         return expenseAmount;
+    }
+
+    public double getDividedAmount() {
+        return dividedAmount;
     }
 
     public String getDueDate() {

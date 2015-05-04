@@ -1,5 +1,6 @@
 package group2.roommates;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -13,12 +14,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,9 +34,13 @@ import java.util.Locale;
 public class ExpenseActivity extends ActionBarActivity {
 
     private ArrayList<ExpenseObject> expenseArray = new ArrayList<>();
+    private ArrayAdapter<CharSequence> spinnerAdapter;
     final Calendar MY_CALENDAR = Calendar.getInstance();
     EditText DATE_INPUT;
     String dueDate;
+    Spinner categorySpinner;
+    double roommateCount;
+    DecimalFormat df = new DecimalFormat("#.##");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +48,11 @@ public class ExpenseActivity extends ActionBarActivity {
         setContentView(R.layout.activity_expense);
         setTitle("Expenses");
 
+        roommateCount = 2.0;
+
         ListAdapter adapter = new ExpenseAdapter(this, R.layout.expense_row, expenseArray);
         ListView expenseListView = (ListView) findViewById(R.id.expenseListView);
+
         expenseListView.setAdapter(adapter);
     }
 
@@ -78,10 +91,9 @@ public class ExpenseActivity extends ActionBarActivity {
 //        descriptionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //        descriptionSpinner.setAdapter(descriptionAdapter);
 
-
         final View ADD_EXPENSE_VIEW = inflater.inflate(R.layout.expense_dialog, null);
 
-        final EditText NAME_INPUT = (EditText) ADD_EXPENSE_VIEW.findViewById(R.id.editDescription);
+//        final EditText NAME_INPUT = (EditText) ADD_EXPENSE_VIEW.findViewById(R.id.editDescription);
 
 //        final String NAME_INPUT = descriptionSpinner.getSelectedItem().toString();
 
@@ -90,24 +102,49 @@ public class ExpenseActivity extends ActionBarActivity {
         final EditText DESCRIPTION_INPUT = (EditText) ADD_EXPENSE_VIEW.findViewById(R.id.editNotes);
 
 
-        NAME_INPUT.setText("", TextView.BufferType.EDITABLE);
+//        NAME_INPUT.setText("", TextView.BufferType.EDITABLE);
         AMOUNT_INPUT.setText("", TextView.BufferType.EDITABLE);
         DESCRIPTION_INPUT.setText("", TextView.BufferType.EDITABLE);
         DATE_INPUT.setText("", TextView.BufferType.EDITABLE);
+
+        spinnerAdapter = ArrayAdapter.createFromResource(ExpenseActivity.this,
+                R.array.description_array, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setTitle("Add New Expense");
         dialogBuilder.setView(ADD_EXPENSE_VIEW);
+
+        categorySpinner = (Spinner) ADD_EXPENSE_VIEW.findViewById(R.id.categorySpinner);
+        categorySpinner.setAdapter(spinnerAdapter);
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 4) {
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         dialogBuilder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ExpenseObject newExpense = new ExpenseObject(0, "$" + AMOUNT_INPUT.getText().toString() + " ", dueDate,
-                        NAME_INPUT.getText().toString(), LoginActivity.getUserName(), DESCRIPTION_INPUT.getText().toString(), false);
+
+                double divide = Double.parseDouble(AMOUNT_INPUT.getText().toString()) / roommateCount;
+
+                ExpenseObject newExpense = new ExpenseObject(0, AMOUNT_INPUT.getText().toString(), divide, dueDate,
+                       categorySpinner.getSelectedItem().toString(), LoginActivity.getUserName(), DESCRIPTION_INPUT.getText().toString(), false);
                 expenseArray.add(newExpense);
 
                 ListAdapter adapter = new ExpenseAdapter(ExpenseActivity.this, R.layout.expense_row, expenseArray);
                 ListView expenseListView = (ListView) findViewById(R.id.expenseListView);
+
                 expenseListView.setAdapter(adapter);
                 registerForContextMenu(expenseListView);
             }
@@ -137,6 +174,7 @@ public class ExpenseActivity extends ActionBarActivity {
                         MY_CALENDAR.get(Calendar.MONTH), MY_CALENDAR.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+
     }
 
     private void updateLabel() {

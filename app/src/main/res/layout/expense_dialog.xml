@@ -18,23 +18,24 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editDescription"
-        android:inputType="text"
-        android:layout_below="@+id/descriptionText"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="15dp" />
-
-    <!--<Spinner-->
-        <!--android:layout_width="wrap_content"-->
+    <!--<EditText-->
+        <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"-->
         <!--android:id="@+id/editDescription"-->
+        <!--android:inputType="text"-->
         <!--android:layout_below="@+id/descriptionText"-->
         <!--android:layout_alignParentStart="true"-->
-        <!--android:layout_marginTop="15dp"-->
-        <!--android:spinnerStyle="@android:style/Widget.Spinner.DropDown" />-->
+        <!--android:layout_marginTop="15dp" />-->
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/categorySpinner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:spinnerMode="dropdown"
+        android:layout_below="@id/descriptionText"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -43,7 +44,7 @@
         android:text="@string/expense_due_date_edit_text"
         android:id="@+id/dueDateText"
         android:layout_marginTop="15dp"
-        android:layout_below="@+id/editDescription"
+        android:layout_below="@+id/categorySpinner"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp" />
