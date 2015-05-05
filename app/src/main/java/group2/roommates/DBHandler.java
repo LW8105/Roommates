@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class DBHandler extends SQLiteOpenHelper{
 
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 9;
     private static final String DATABASE_NAME = "roommates_data.db";
 
     public static final String TABLE_EVENTS = "events"; //name of the table storing information for calendar events
@@ -25,6 +25,16 @@ public class DBHandler extends SQLiteOpenHelper{
     public static final String TODO_DESCRIPTION = "description";
     public static final String TODO_AUTHOR = "author";
     public static final String TODO_CHECKED = "checked";
+
+    public static final String TABLE_EXPENSES = "expenses"; //table storing expenses
+    public static final String EXPENSE_ID = "_id";
+    public static final String EXPENSE_AMOUNT = "amount";
+    public static final String EXPENSE_DIVAMOUNT = "divided_amount";
+    public static final String EXPENSE_DUEDATE = "due_date";
+    public static final String EXPENSE_NAME = "name";
+    public static final String EXPENSE_AUTHOR = "author";
+    public static final String EXPENSE_NOTES = "notes";
+    public static final String EXPENSE_PAID = "paid";
 
     public static final String TABLE_FEED = "feed"; //table storing FeedObjects
     public static final String FEED_ID = "_id";
@@ -55,6 +65,17 @@ public class DBHandler extends SQLiteOpenHelper{
                 TODO_CHECKED + " INTEGER" +
                 ");";
 
+        String query_expenses = "CREATE TABLE " + TABLE_EXPENSES + "(" +
+                EXPENSE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                EXPENSE_AMOUNT + " TEXT, " +
+                EXPENSE_DIVAMOUNT + " REAL, " +
+                EXPENSE_DUEDATE + " TEXT," +
+                EXPENSE_NAME + " TEXT," +
+                EXPENSE_AUTHOR + " TEXT," +
+                EXPENSE_NOTES + " TEXT," +
+                EXPENSE_PAID + " INTEGER" +
+                ");";
+
         String query_feed = "CREATE TABLE " + TABLE_FEED + "(" +
                 FEED_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 FEED_TYPE + " TEXT, " +
@@ -65,6 +86,7 @@ public class DBHandler extends SQLiteOpenHelper{
 
         db.execSQL(query_events);
         db.execSQL(query_todo);
+        db.execSQL(query_expenses);
         db.execSQL(query_feed);
 
     }
@@ -73,6 +95,7 @@ public class DBHandler extends SQLiteOpenHelper{
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENTS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TODO);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXPENSES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_FEED);
         onCreate(db);
     }
@@ -115,13 +138,31 @@ public class DBHandler extends SQLiteOpenHelper{
         db.close();
     }
 
+    public void addExpense(ExpenseObject expenseObject){ //Add a new row to the expense table
+        ContentValues values = new ContentValues();
+        //fill the columns with their corresponding values
+        values.put(EXPENSE_AMOUNT, expenseObject.getExpenseAmount());
+        values.put(EXPENSE_DIVAMOUNT, expenseObject.getDividedAmount());
+        values.put(EXPENSE_DUEDATE, expenseObject.getDueDate());
+        values.put(EXPENSE_NAME, expenseObject.getExpenseName());
+        values.put(EXPENSE_AUTHOR, expenseObject.getAuthor());
+        values.put(EXPENSE_NOTES, expenseObject.getNotes());
+        values.put(EXPENSE_PAID, expenseObject.isPaid());
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.insert(TABLE_EXPENSES, null, values);
+        db.close();
+    }
+
     public void deleteEvent(String title){ //Delete an event row in the database. (Need to update to use _id if possible)
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_EVENTS + " WHERE " + EVENT_TITLE + "=\"" + title + "\";");
     }
 
-    public void deleteFeedObject(){
-        //to be completed
+    public void deleteExpense(int id){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_EXPENSES + " WHERE " + EXPENSE_ID + "=\"" + id + "\";");
+
     }
 
     public String databaseToString(){
@@ -230,6 +271,44 @@ public class DBHandler extends SQLiteOpenHelper{
 
         return toDoArray;
     }
+
+    public ArrayList<ExpenseObject> pullExpenses (){
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_EXPENSES + " WHERE 1";
+        //Cursor points to a location in the results
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst(); // move to the first row
+
+        ArrayList<ExpenseObject> expenseArray = new ArrayList<ExpenseObject>();
+
+        while(!c.isAfterLast()){ //While there are still more entries (while the cursor is not after the last entry)
+            //Loops through all rows in the table
+
+            int pId = c.getInt(c.getColumnIndex("_id"));
+            String pAmount = c.getString(c.getColumnIndex("amount"));
+            double pDivAmount = c.getDouble(c.getColumnIndex("divided_amount"));
+            String pDueDate = c.getString(c.getColumnIndex("due_date"));
+            String pName = c.getString(c.getColumnIndex("name"));
+            String pAuthor = c.getString(c.getColumnIndex("author"));
+            String pNotes = c.getString(c.getColumnIndex("notes"));
+            int pPaid = c.getInt(c.getColumnIndex("paid"));
+            boolean paidBoolean;
+            if(pPaid == 0){
+                paidBoolean = false;
+            }else{
+                paidBoolean = true;
+            }
+
+            ExpenseObject pulledExpense = new ExpenseObject(pId, pAmount, pDivAmount, pDueDate, pName, pAuthor, pNotes, paidBoolean);
+            //pulledExpense.setId(pId);
+            expenseArray.add(pulledExpense);
+
+            c.moveToNext();
+        }//end while
+        db.close();
+
+        return expenseArray;
+    }// end of pullExpenses
 
 }
 

@@ -56,7 +56,7 @@ public class ToDoActivity extends ActionBarActivity {
                 dbHandler.addToDoItem(newItem); //add new item to the DB
                 toDoArray = dbHandler.pullToDoList(); //repopulate the array with the updated data
                 Collections.reverse(toDoArray);
-                
+
                 ListAdapter adapter = new ToDoAdapter(ToDoActivity.this, R.layout.todo_row, toDoArray);
                 ListView toDoListView = (ListView) findViewById(R.id.toDoListView);
                 toDoListView.setAdapter(adapter);

@@ -27,7 +27,7 @@
     <string name="action_settings_text">Settings</string>
     <string name="expense_name_text">Expense Name</string>
     <string name="add_expense_button_text">Add Expense</string>
-    <string name="add_roommate_button_text">Add Rooommate</string>
+    <string name="add_roommate_button_text">Add Roommate</string>
     <string name="due_date_text">Due Date</string>
     <string name="expense_amount_text">Expense Amount</string>
     <string name="author_text">Author</string>

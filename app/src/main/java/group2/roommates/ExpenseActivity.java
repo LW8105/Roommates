@@ -42,6 +42,7 @@ public class ExpenseActivity extends ActionBarActivity {
     double roommateCount;
     DecimalFormat df = new DecimalFormat("#.##");
     ExpenseObject object;
+    DBHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,10 @@ public class ExpenseActivity extends ActionBarActivity {
         setContentView(R.layout.activity_expense);
         setTitle("Expenses");
 
-        roommateCount = 2.0;
+        roommateCount = 3.0;
+
+        dbHandler = new DBHandler(this, null, null, 1); //SQLite DB handler
+        expenseArray = dbHandler.pullExpenses(); //fill expense array with expense objects from the db
 
         ListAdapter adapter = new ExpenseAdapter(this, R.layout.expense_row, expenseArray);
         ListView expenseListView = (ListView) findViewById(R.id.expenseListView);
@@ -141,7 +145,16 @@ public class ExpenseActivity extends ActionBarActivity {
 
                 ExpenseObject newExpense = new ExpenseObject(0, AMOUNT_INPUT.getText().toString(), divide, dueDate,
                        categorySpinner.getSelectedItem().toString(), LoginActivity.getUserName(), DESCRIPTION_INPUT.getText().toString(), false);
-                expenseArray.add(newExpense);
+                //expenseArray.add(newExpense);
+                dbHandler.addExpense(newExpense); //add new expense to the database
+                expenseArray = dbHandler.pullExpenses(); //update expense array with new data
+
+                //Create a corresponding feedObject and add it to the database
+                Long tsLong = System.currentTimeMillis(); //need to know what time the event was added by a user
+                java.util.Date time = new java.util.Date(tsLong);
+                String timeString = time.toString(); // dow mon dd hh:mm:ss zzz yyyy
+                FeedObject newFeedObject = new FeedObject("expense", newExpense.getExpenseName(), LoginActivity.getUserName(), timeString);
+                dbHandler.addFeedObject(newFeedObject);
 
                 ListAdapter adapter = new ExpenseAdapter(ExpenseActivity.this, R.layout.expense_row, expenseArray);
                 ListView expenseListView = (ListView) findViewById(R.id.expenseListView);
