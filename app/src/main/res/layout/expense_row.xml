@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/expenseRowTemplate"
-    android:background="#FFFFFF"
+    android:background="#006699"
     android:paddingRight="10dp">
 
     <TextView
@@ -18,7 +18,8 @@
         android:paddingRight="5dp"
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/dueDateText"
-        android:layout_alignStart="@+id/dueDateText" />
+        android:layout_alignStart="@+id/dueDateText"
+        android:textColor="#FFFFFFFF" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,7 +36,8 @@
         android:textSize="16sp"
         android:layout_below="@+id/expenseNameText"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textColor="#FFFFFFFF" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -45,7 +47,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_gravity="right"
-        android:textColor="@android:color/holo_green_dark"
+        android:textColor="#ff07ae0c"
         android:textAlignment="gravity"
         android:gravity="center"
         android:padding="5dp"
@@ -61,7 +63,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_gravity="right"
-        android:textColor="@android:color/holo_blue_dark"
+        android:textColor="#ffeaf303"
         android:textAlignment="gravity"
         android:gravity="center"
         android:padding="5dp"
@@ -83,7 +85,8 @@
         android:layout_alignParentRight="true"
         android:paddingTop="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginLeft="5dp" />
+        android:layout_marginLeft="5dp"
+        android:textColor="#FFFFFFFF" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -96,7 +99,8 @@
         android:textStyle="italic"
         android:layout_below="@+id/expenseStatusText"
         android:layout_alignLeft="@+id/expenseStatusText"
-        android:layout_alignStart="@+id/expenseStatusText" />
+        android:layout_alignStart="@+id/expenseStatusText"
+        android:textColor="#FFFFFFFF" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -110,6 +114,7 @@
         android:paddingTop="10dp"
         android:layout_below="@+id/dueDateText"
         android:layout_alignLeft="@+id/dueDateText"
-        android:layout_alignStart="@+id/dueDateText" />
+        android:layout_alignStart="@+id/dueDateText"
+        android:textColor="#FFFFFFFF" />
 
 </RelativeLayout>

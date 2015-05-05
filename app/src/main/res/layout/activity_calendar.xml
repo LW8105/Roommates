@@ -4,13 +4,14 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     android:paddingBottom="0dp"
-    tools:context="group2.roommates.CalendarActivity">
+    tools:context="group2.roommates.CalendarActivity"
+    android:background="#006699">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#FFFFFF"
+        android:background="#006699"
         android:weightSum="1"
         android:layout_alignParentBottom="true">
 
@@ -21,7 +22,7 @@
             android:showWeekNumber="false"
             android:selectedWeekBackgroundColor="#FFFFFF"
             android:shownWeekCount="5"
-            android:background="#FFFFFF" />
+            android:background="#FFFFFFFF" />
 
         <TextView
             android:layout_width="match_parent"

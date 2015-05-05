@@ -1,6 +1,5 @@
 package group2.roommates;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -10,7 +9,6 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,8 +19,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -43,6 +39,7 @@ public class ExpenseActivity extends ActionBarActivity {
     DecimalFormat df = new DecimalFormat("#.##");
     ExpenseObject object;
     DBHandler dbHandler;
+    int id = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,28 +83,14 @@ public class ExpenseActivity extends ActionBarActivity {
 
     public void addExpenseClick(View view) throws ParseException {
         LayoutInflater inflater = LayoutInflater.from(this);
-        final double AMOUNT;
-
-//        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ExpenseActivity.this);
-
-//        final Spinner descriptionSpinner = (Spinner) findViewById(R.id.editDescription);
-//        final ArrayAdapter<CharSequence> descriptionAdapter = ArrayAdapter.createFromResource(this,
-//                R.array.description_array, android.R.layout.simple_spinner_item);
-//        descriptionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        descriptionSpinner.setAdapter(descriptionAdapter);
 
         final View ADD_EXPENSE_VIEW = inflater.inflate(R.layout.expense_dialog, null);
-
-//        final EditText NAME_INPUT = (EditText) ADD_EXPENSE_VIEW.findViewById(R.id.editDescription);
-
-//        final String NAME_INPUT = descriptionSpinner.getSelectedItem().toString();
 
         DATE_INPUT = (EditText) ADD_EXPENSE_VIEW.findViewById(R.id.editDueDate);
         final EditText AMOUNT_INPUT = (EditText) ADD_EXPENSE_VIEW.findViewById(R.id.editAmount);
         final EditText DESCRIPTION_INPUT = (EditText) ADD_EXPENSE_VIEW.findViewById(R.id.editNotes);
 
 
-//        NAME_INPUT.setText("", TextView.BufferType.EDITABLE);
         AMOUNT_INPUT.setText("", TextView.BufferType.EDITABLE);
         DESCRIPTION_INPUT.setText("", TextView.BufferType.EDITABLE);
         DATE_INPUT.setText("", TextView.BufferType.EDITABLE);
@@ -143,7 +126,7 @@ public class ExpenseActivity extends ActionBarActivity {
 
                 double divide = Double.parseDouble(AMOUNT_INPUT.getText().toString()) / roommateCount;
 
-                ExpenseObject newExpense = new ExpenseObject(0, AMOUNT_INPUT.getText().toString(), divide, dueDate,
+                ExpenseObject newExpense = new ExpenseObject(generateid(), AMOUNT_INPUT.getText().toString(), divide, dueDate,
                        categorySpinner.getSelectedItem().toString(), LoginActivity.getUserName(), DESCRIPTION_INPUT.getText().toString(), false);
                 //expenseArray.add(newExpense);
                 dbHandler.addExpense(newExpense); //add new expense to the database
@@ -210,8 +193,9 @@ public class ExpenseActivity extends ActionBarActivity {
 
             menu.setHeaderTitle(object.getExpenseName());
 
-            String[] menuOptions = getResources().getStringArray(R.array.menu_options_array);
-            for (int i = 0; i < menuOptions.length; i++)
+
+            String[] menuOptions = getResources().getStringArray(R.array.menu_options_array);           // populates context menu with
+            for (int i = 0; i < menuOptions.length; i++)                                                // edit, delete, and edit paid/unpaid
                 menu.add(Menu.NONE, i, i, menuOptions[i]);
         }
     }
@@ -220,28 +204,27 @@ public class ExpenseActivity extends ActionBarActivity {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         int menuItemIndex = item.getItemId();
-        String[] menuItems = getResources().getStringArray(R.array.menu_options_array);
-        String menuItemName = menuItems[menuItemIndex];
-        String listItemName = expenseArray.get(info.position).toString();
-
-
-//        TextView text = (TextView) findViewById(R.id.footer);
-//        text.setText(String.format("Selected %s for item %s", menuItemName, listItemName));
 
         switch (menuItemIndex) {
             case 0:
                 Log.i("Menu option selected", "edit");
                 LayoutInflater inflater = LayoutInflater.from(this);
-                buildAlertDialog(inflater, object);
+                editAlertDialog(inflater, object);
                 break;
 
             case 1:
                 Log.i("Menu option selected", "delete");
+                dbHandler.deleteExpense(object.getid());
+                expenseArray = dbHandler.pullExpenses();
+
+                ListView expenseListView = (ListView) findViewById(R.id.expenseListView);
+                ListAdapter adapter = new ExpenseAdapter(ExpenseActivity.this, R.layout.expense_row, expenseArray);
+                expenseListView.setAdapter(adapter);
                 break;
 
             case 2:
-                ListAdapter adapter = new ExpenseAdapter(ExpenseActivity.this, R.layout.expense_row, expenseArray);
-                ListView expenseListView = (ListView) findViewById(R.id.expenseListView);
+                adapter = new ExpenseAdapter(ExpenseActivity.this, R.layout.expense_row, expenseArray);
+                expenseListView = (ListView) findViewById(R.id.expenseListView);
 
                 object.setPaid(!object.isPaid());
                 expenseListView.setAdapter(adapter);
@@ -251,7 +234,7 @@ public class ExpenseActivity extends ActionBarActivity {
         return true;
     }
 
-    public void buildAlertDialog(LayoutInflater inflater, final ExpenseObject object) {
+    public void editAlertDialog(LayoutInflater inflater, final ExpenseObject object) {               // builds dialog to edit item
         final View ADD_EXPENSE_VIEW = inflater.inflate(R.layout.expense_dialog, null);
 
         DATE_INPUT = (EditText) ADD_EXPENSE_VIEW.findViewById(R.id.editDueDate);
@@ -277,9 +260,7 @@ public class ExpenseActivity extends ActionBarActivity {
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 4) {
 
-                }
             }
 
             @Override
@@ -288,16 +269,12 @@ public class ExpenseActivity extends ActionBarActivity {
             }
         });
 
-        dialogBuilder.setPositiveButton("EDIT", new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
                 double divide = Double.parseDouble(AMOUNT_INPUT.getText().toString()) / roommateCount;
                 DecimalFormat df = new DecimalFormat("#.00");
-
-//                ExpenseObject newExpense = new ExpenseObject(0, AMOUNT_INPUT.getText().toString(), divide, dueDate,
-//                        categorySpinner.getSelectedItem().toString(), LoginActivity.getUserName(), DESCRIPTION_INPUT.getText().toString(), false);
-//                expenseArray.add(newExpense);
 
                 object.setExpenseName(categorySpinner.getSelectedItem().toString());
                 object.setExpenseAmount(AMOUNT_INPUT.getText().toString());
@@ -337,6 +314,14 @@ public class ExpenseActivity extends ActionBarActivity {
                         MY_CALENDAR.get(Calendar.MONTH), MY_CALENDAR.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+    }
 
+    public void deleteExpenseObject(ExpenseObject id) {
+
+    }
+
+    public int generateid() {
+        id = id + 1;
+        return id;
     }
 }

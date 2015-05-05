@@ -63,7 +63,6 @@ public class ExpenseObject {
         this.author = author;
     }
 
-
     public String getExpenseName() {
         return expenseName;
     }
@@ -75,7 +74,6 @@ public class ExpenseObject {
     public String getNotes() {
         return notes;
     }
-
 
     public void setNotes(String notes) {
         this.notes = notes;
