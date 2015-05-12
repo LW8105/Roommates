@@ -116,7 +116,7 @@ public class RoommatezActivity extends ActionBarActivity {
         NAME_INPUT.setText("", TextView.BufferType.EDITABLE);
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setTitle("Add New Expense");
+        dialogBuilder.setTitle("Add New Roommate");
         dialogBuilder.setView(ADD_ROOMMATE_VIEW);
 
         dialogBuilder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
